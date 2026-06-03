@@ -256,60 +256,195 @@ code {
   cursor: pointer;
 }
 
-/* === UPLOAD MODAL === */
-.upload-modal {
+/* === BULK UPLOAD MODAL === */
+.bulk-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,10,30,0.6);
   z-index: 9000;
   display: none;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
 }
-.upload-modal.open { display: flex; }
-.upload-modal-card {
-  background: var(--bg-panel);
+.bulk-modal.open { display: flex; }
+.bulk-card {
+  background: #fff;
   border: 1px solid var(--rule);
   padding: 32px;
-  width: 480px;
+  width: 520px;
   max-width: 95vw;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+  border-radius: 6px;
 }
-.um-title { font-size: 20px; font-weight: 700; margin-bottom: 24px; }
-.um-field { margin-bottom: 16px; }
+.bulk-card-wide { width: 860px; }
+.bulk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.bulk-title { font-size: 20px; font-weight: 700; color: var(--ink); }
+.bulk-subtitle { font-size: 13px; color: var(--ink-mute); margin-top: 4px; }
+.bulk-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--ink-mute);
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.bulk-close:hover { color: var(--ink); }
+.bulk-drop-zone {
+  border: 2px dashed var(--rule);
+  border-radius: 6px;
+  padding: 48px 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 16px;
+}
+.bulk-drop-zone:hover, .bulk-drop-zone.dragging {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.bdz-icon { font-size: 36px; color: var(--ink-mute); margin-bottom: 12px; }
+.bdz-title { font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.bdz-sub { font-size: 13px; color: var(--ink-mute); }
+.bdz-browse { color: var(--accent); text-decoration: underline; cursor: pointer; }
+
+/* === UPLOAD CHOICE GRID === */
+.upload-choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.upload-choice-card {
+  border: 2px solid var(--rule);
+  border-radius: 6px;
+  padding: 20px 18px;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+.upload-choice-card:hover { border-color: var(--accent); background: var(--accent-soft); }
+.ucc-icon { font-size: 28px; margin-bottom: 10px; }
+.ucc-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+.ucc-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.55; }
+.ucc-tag {
+  display: inline-block;
+  margin-top: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+/* === INDIVIDUAL UPLOAD FIELDS === */
+.um-field { margin-bottom: 14px; }
 .um-field label { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-mute); margin-bottom: 6px; }
 .um-field select {
-  width: 100%;
-  padding: 10px 12px;
+  width: 100%; padding: 10px 12px; border: 1px solid var(--rule);
+  background: var(--bg); font-size: 14px; color: var(--ink);
+  border-radius: 3px; font-family: inherit;
+}
+.bulk-hint {
+  font-size: 12px;
+  color: var(--ink-mute);
+  background: var(--bg-alt);
+  padding: 10px 14px;
+  border-radius: 4px;
+  line-height: 1.55;
+}
+
+/* Review step */
+.bulk-review-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+.conf-badge { padding: 3px 10px; border-radius: 3px; font-weight: 500; }
+.conf-badge.high { background: var(--good-bg); color: var(--good); }
+.conf-badge.low  { background: var(--warn-bg); color: var(--warn); }
+.conf-badge.none { background: var(--bad-bg);  color: var(--bad);  }
+
+.bulk-table-wrap {
+  max-height: 420px;
+  overflow-y: auto;
   border: 1px solid var(--rule);
-  background: var(--bg);
-  font-size: 14px;
-  color: var(--ink);
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+.bulk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.bulk-table th {
+  background: var(--bg-alt);
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-mute);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid var(--rule);
+}
+.bulk-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: middle;
+}
+.bulk-table tr:last-child td { border-bottom: none; }
+.bulk-table tr.conf-low  td { background: #fffbeb; }
+.bulk-table tr.conf-none td { background: #fff5f5; }
+.bulk-table tr.conf-high td { background: #fff; }
+.bulk-table select {
+  padding: 4px 8px;
+  border: 1px solid var(--rule);
   border-radius: 3px;
+  font-size: 12px;
   font-family: inherit;
+  color: var(--ink);
+  background: #fff;
+  width: 100%;
 }
-.um-drop {
-  border: 2px dashed var(--rule);
-  padding: 32px 20px;
-  text-align: center;
-  margin: 20px 0;
+.bulk-table select.unset { border-color: var(--bad); color: var(--bad); }
+.bulk-table .jname { font-weight: 500; max-width: 260px; }
+.bulk-table .jid { font-family: 'JetBrains Mono', monospace; color: var(--ink-mute); font-size: 11px; }
+.conf-col { width: 120px; }
+.conf-icon { font-size: 13px; }
+
+.bulk-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.bulk-unclassified-warn { font-size: 13px; color: var(--bad); font-weight: 500; }
+.bulk-footer-actions { display: flex; gap: 10px; margin-left: auto; }
+.bulk-btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  transition: border-color 0.15s;
 }
-.um-drop:hover, .um-drop.dragging { border-color: var(--accent); background: var(--accent-soft); }
-.um-drop-icon { font-size: 28px; color: var(--ink-mute); margin-bottom: 8px; }
-.um-drop div { font-size: 13px; color: var(--ink-soft); }
-.um-drop-sub { margin-top: 4px; font-size: 12px; color: var(--ink-mute); }
-.um-browse { color: var(--accent); cursor: pointer; text-decoration: underline; }
-.um-actions { display: flex; justify-content: flex-end; gap: 10px; }
-.um-cancel {
+.bulk-btn-primary:hover { background: #0040a0; }
+.bulk-btn-primary:disabled { background: #aaa; cursor: not-allowed; }
+.bulk-btn-secondary {
   background: none;
   border: 1px solid var(--rule);
-  padding: 8px 18px;
+  padding: 10px 18px;
+  border-radius: 4px;
   font-size: 13px;
-  cursor: pointer;
   color: var(--ink-soft);
-  border-radius: 3px;
+  cursor: pointer;
 }
 
 /* === CROSS-CATEGORY INSPIRATION SECTION === */
@@ -999,32 +1134,124 @@ h3 { font-size: 18px; margin: 28px 0 10px; font-weight: 600; }
   <div class="tabs" id="tabs"></div>
 </nav>
 
-<!-- ============================================================
-     UPLOAD MODAL
-     ============================================================ -->
-<div class="upload-modal" id="upload-modal">
-  <div class="upload-modal-card">
-    <div class="um-title">Add journey data</div>
-    <div class="um-field">
-      <label>Category</label>
-      <select id="um-cat">
-        <option value="hair">Hair</option>
-        <option value="beard">Beard</option>
-        <option value="nutrition">Nutrition</option>
-      </select>
+<!-- BULK UPLOAD MODAL -->
+<div class="bulk-modal" id="bulk-modal">
+  <!-- STEP 0: Choose upload mode -->
+  <div class="bulk-step" id="bulk-step-choose" style="display:flex;justify-content:center;width:100%">
+    <div class="bulk-card">
+      <div class="bulk-header">
+        <div class="bulk-title">Add journey data</div>
+        <button class="bulk-close" id="bulk-close-0">✕</button>
+      </div>
+      <p style="font-size:13px;color:var(--ink-soft);margin:0 0 20px">How would you like to upload?</p>
+      <div class="upload-choice-grid">
+        <div class="upload-choice-card" id="choose-bulk">
+          <div class="ucc-icon">📦</div>
+          <div class="ucc-title">Bulk upload</div>
+          <div class="ucc-desc">Drop all your CSVs at once — any category, any product. The tool auto-classifies each journey and lets you review before saving.</div>
+          <div class="ucc-tag">Recommended</div>
+        </div>
+        <div class="upload-choice-card" id="choose-single">
+          <div class="ucc-icon">🗂️</div>
+          <div class="ucc-title">Upload by category</div>
+          <div class="ucc-desc">Pick a specific category and sub-category first, then upload just those CSV files. Useful when updating one product at a time.</div>
+        </div>
+      </div>
     </div>
-    <div class="um-field">
-      <label>Sub-category</label>
-      <select id="um-subcat"></select>
+  </div>
+
+  <!-- STEP 1: Bulk drop zone -->
+  <div class="bulk-step" id="bulk-step-drop" style="display:none;justify-content:center;width:100%">
+    <div class="bulk-card">
+      <div class="bulk-header">
+        <div class="bulk-title">Add journey data</div>
+        <button class="bulk-close" id="bulk-close-1">✕</button>
+      </div>
+      <div class="bulk-drop-zone" id="bulk-drop-zone">
+        <div class="bdz-icon">↑</div>
+        <div class="bdz-title">Drop all your CSV files here</div>
+        <div class="bdz-sub">Any category · Any product · All at once</div>
+        <div class="bdz-sub" style="margin-top:8px">or <span class="bdz-browse" id="bdz-browse">browse files</span></div>
+        <input type="file" id="bdz-file-input" accept=".csv" multiple style="display:none">
+      </div>
+      <div class="bulk-hint">
+        The tool will read every journey name and auto-suggest the right category. You'll review before anything is saved.
+      </div>
     </div>
-    <div class="um-drop" id="um-drop">
-      <div class="um-drop-icon">↑</div>
-      <div>Drop CleverTap CSV files here</div>
-      <div class="um-drop-sub">or <span class="um-browse" id="um-browse">browse files</span></div>
-      <input type="file" id="um-file-input" accept=".csv" multiple style="display:none">
+  </div>
+
+  <!-- STEP 2: Review table -->
+  <div class="bulk-step" id="bulk-step-review" style="display:none;justify-content:center;width:100%">
+    <div class="bulk-card bulk-card-wide">
+      <div class="bulk-header">
+        <div>
+          <div class="bulk-title">Review &amp; confirm</div>
+          <div class="bulk-subtitle" id="bulk-review-subtitle"></div>
+        </div>
+        <button class="bulk-close" id="bulk-close-2">✕</button>
+      </div>
+      <div class="bulk-review-legend">
+        <span class="conf-badge high">✅ High confidence</span>
+        <span class="conf-badge low">⚠️ Low confidence — please verify</span>
+        <span class="conf-badge none">❓ Unclassified — must assign</span>
+      </div>
+      <div class="bulk-table-wrap">
+        <table class="bulk-table" id="bulk-review-table">
+          <thead>
+            <tr>
+              <th>Journey</th>
+              <th>ID</th>
+              <th>Category</th>
+              <th>Sub-category</th>
+              <th class="conf-col">Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="bulk-review-tbody"></tbody>
+        </table>
+      </div>
+      <div class="bulk-footer">
+        <div class="bulk-unclassified-warn" id="bulk-unclassified-warn" style="display:none">
+          ❗ <span id="bulk-warn-count"></span> journey(s) still unclassified — assign a category to each before confirming.
+        </div>
+        <div class="bulk-footer-actions">
+          <button class="bulk-btn-secondary" id="bulk-back">← Back</button>
+          <button class="bulk-btn-primary" id="bulk-confirm">Confirm &amp; Load</button>
+        </div>
+      </div>
     </div>
-    <div class="um-actions">
-      <button class="um-cancel" id="um-cancel">Cancel</button>
+  </div>
+
+  <!-- STEP INDIVIDUAL: Upload by category -->
+  <div class="bulk-step" id="bulk-step-single" style="display:none;justify-content:center;width:100%">
+    <div class="bulk-card">
+      <div class="bulk-header">
+        <div>
+          <div class="bulk-title">Upload by category</div>
+          <div class="bulk-subtitle">Select where this data belongs, then drop the CSV files</div>
+        </div>
+        <button class="bulk-close" id="bulk-close-single">✕</button>
+      </div>
+      <div class="um-field">
+        <label>Category</label>
+        <select id="um-cat">
+          <option value="hair">Hair</option>
+          <option value="beard">Beard</option>
+          <option value="nutrition">Nutrition</option>
+        </select>
+      </div>
+      <div class="um-field">
+        <label>Sub-category</label>
+        <select id="um-subcat"></select>
+      </div>
+      <div class="bulk-drop-zone" id="single-drop-zone">
+        <div class="bdz-icon">↑</div>
+        <div class="bdz-title">Drop CSV files here</div>
+        <div class="bdz-sub">or <span class="bdz-browse" id="single-browse">browse files</span></div>
+        <input type="file" id="single-file-input" accept=".csv" multiple style="display:none">
+      </div>
+      <div class="bulk-footer-actions" style="justify-content:space-between;width:100%;display:flex">
+        <button class="bulk-btn-secondary" id="single-back">← Back</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1892,20 +2119,55 @@ function processRawRows(filesData) {
    E. FILE UPLOAD HANDLING
    ==================================================================== */
 
-async function handleCategoryUpload(fileList) {
+/* ====================================================================
+   BULK UPLOAD + CLASSIFY FLOW
+   ==================================================================== */
+
+let bulkParsedJourneys = [];
+
+function openBulkModal() {
+  document.getElementById('bulk-modal').classList.add('open');
+  showBulkStep('choose');
+}
+
+function closeBulkModal() {
+  document.getElementById('bulk-modal').classList.remove('open');
+  bulkParsedJourneys = [];
+}
+
+function showBulkStep(step) {
+  ['choose','drop','review','single'].forEach(s => {
+    const el = document.getElementById('bulk-step-' + s);
+    if (el) el.style.display = s === step ? 'flex' : 'none';
+  });
+}
+
+/* Individual upload helpers */
+function populateSubcatDropdown() {
   const cat = document.getElementById('um-cat').value;
+  const opts = {
+    hair:      [['stage-2','Stage 2 Kit'],['stage-1','Stage 1 Kit'],['stage-3','Stage 3 Kit'],['gummies','Hair Gummies'],['all','All Hair']],
+    beard:     [['all','All Beard']],
+    nutrition: [['creatine','Creatine'],['shilajit','Shilajit'],['all','All Nutrition']],
+  };
+  document.getElementById('um-subcat').innerHTML =
+    (opts[cat] || []).map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+}
+
+async function handleSingleUpload(fileList) {
+  const cat   = document.getElementById('um-cat').value;
   const subcat = document.getElementById('um-subcat').value;
   const files = Array.from(fileList).filter(f => f.name.toLowerCase().endsWith('.csv'));
   if (!files.length) { toast('No CSV files found.', 'error'); return; }
-
   toast(`Parsing ${files.length} file${files.length > 1 ? 's' : ''}…`, 'info', 2500);
   try {
     const parsed = await Promise.all(files.map(parseCsvFile));
     const journeys = processRawRows(parsed);
     if (!journeys.length) { toast('No journeys found.', 'error'); return; }
+    if (!state.categoryData[cat]) state.categoryData[cat] = {};
     state.categoryData[cat][subcat] = journeys;
     saveAll();
-    closeUploadModal();
+    closeBulkModal();
     state.activeCategory = cat;
     state.activeSubcategory = subcat;
     renderAll();
@@ -1916,55 +2178,232 @@ async function handleCategoryUpload(fileList) {
   }
 }
 
+function autoClassify(journeyName) {
+  const n = journeyName.toLowerCase();
+
+  if (n.includes('shilajit'))
+    return { category: 'nutrition', subcategory: 'shilajit', confidence: 'high' };
+  if (n.includes('creatine'))
+    return { category: 'nutrition', subcategory: 'creatine', confidence: 'high' };
+  if (n.includes('beard') || /\bbg\b/.test(n) || n.startsWith('bg_') || n.includes('_bg_'))
+    return { category: 'beard', subcategory: 'all', confidence: 'high' };
+  if (n.includes('stage 1') || n.includes('stage1') || n.includes('_s1') || n.includes('s1_') || n.includes('stage_1'))
+    return { category: 'hair', subcategory: 'stage-1', confidence: 'high' };
+  if (n.includes('stage 2') || n.includes('stage2') || n.includes('_s2') || n.includes('s2_') || n.includes('stage_2') || /\bdas\b/.test(n) || /\bddrf\b/.test(n) || n.includes('tp_stage'))
+    return { category: 'hair', subcategory: 'stage-2', confidence: 'high' };
+  if (n.includes('stage 3') || n.includes('stage3') || n.includes('_s3') || n.includes('s3_') || n.includes('stage_3'))
+    return { category: 'hair', subcategory: 'stage-3', confidence: 'high' };
+  if (n.includes('gumm') || n.includes('biotin'))
+    return { category: 'hair', subcategory: 'gummies', confidence: 'high' };
+  if (n.includes('hair') || n.includes('hairfall') || n.includes('minox') || n.includes('dandruff') || n.includes('accu') || n.includes('hair rx'))
+    return { category: 'hair', subcategory: 'all', confidence: 'high' };
+  if (n.includes('gut') || n.includes('probiotic'))
+    return { category: 'nutrition', subcategory: 'creatine', confidence: 'low' };
+  if (n.includes('ht ') || n.includes('ht_') || n.includes('_ht'))
+    return { category: 'hair', subcategory: 'all', confidence: 'low' };
+
+  return { category: '', subcategory: '', confidence: 'none' };
+}
+
+async function handleBulkFiles(fileList) {
+  const files = Array.from(fileList).filter(f => f.name.toLowerCase().endsWith('.csv'));
+  if (!files.length) { toast('No CSV files found.', 'error'); return; }
+
+  toast(`Parsing ${files.length} file${files.length > 1 ? 's' : ''}…`, 'info', 2500);
+
+  try {
+    const parsed = await Promise.all(files.map(parseCsvFile));
+    const allJourneys = processRawRows(parsed);
+    if (!allJourneys.length) { toast('No journeys found in those files.', 'error'); return; }
+
+    bulkParsedJourneys = allJourneys.map(j => {
+      const cls = autoClassify(j.name);
+      return { journey: j, ...cls };
+    });
+
+    renderBulkReviewTable();
+    showBulkStep('review');
+
+  } catch(err) {
+    console.error(err);
+    toast(err.message || 'Error parsing files.', 'error', 7000);
+  }
+}
+
+function getCategoryOptions(selectedCat) {
+  return `
+    <option value="" ${!selectedCat ? 'selected' : ''}>— pick category —</option>
+    <option value="hair"      ${selectedCat==='hair'      ? 'selected':''}>Hair</option>
+    <option value="beard"     ${selectedCat==='beard'     ? 'selected':''}>Beard</option>
+    <option value="nutrition" ${selectedCat==='nutrition' ? 'selected':''}>Nutrition</option>
+  `;
+}
+
+function getSubcategoryOptions(cat, selectedSub) {
+  const opts = {
+    hair:      [['all','All Hair'],['stage-1','Stage 1 Kit'],['stage-2','Stage 2 Kit'],['stage-3','Stage 3 Kit'],['gummies','Hair Gummies']],
+    beard:     [['all','All Beard']],
+    nutrition: [['all','All Nutrition'],['creatine','Creatine'],['shilajit','Shilajit']],
+  };
+  if (!cat || !opts[cat]) return '<option value="">— pick category first —</option>';
+  return opts[cat].map(([v,l]) => `<option value="${v}" ${v===selectedSub?'selected':''}>${l}</option>`).join('');
+}
+
+function renderBulkReviewTable() {
+  const sources = [...new Set(bulkParsedJourneys.map(r => r.journey._source || ''))];
+  document.getElementById('bulk-review-subtitle').textContent =
+    `${bulkParsedJourneys.length} journeys found across ${sources.length} file(s)`;
+
+  const confIcon  = { high: '✅', low: '⚠️', none: '❓' };
+  const confLabel = { high: 'High', low: 'Low — verify', none: 'Must assign' };
+
+  const tbody = document.getElementById('bulk-review-tbody');
+  tbody.innerHTML = bulkParsedJourneys.map((row, idx) => `
+    <tr class="conf-${row.confidence}" data-idx="${idx}">
+      <td class="jname">${escapeHTML(row.journey.name)}</td>
+      <td class="jid">${row.journey.id}</td>
+      <td>
+        <select class="cat-sel ${!row.category ? 'unset' : ''}" data-idx="${idx}" onchange="onBulkCatChange(this)">
+          ${getCategoryOptions(row.category)}
+        </select>
+      </td>
+      <td>
+        <select class="sub-sel ${!row.subcategory ? 'unset' : ''}" data-idx="${idx}" onchange="onBulkSubChange(this)">
+          ${getSubcategoryOptions(row.category, row.subcategory)}
+        </select>
+      </td>
+      <td><span class="conf-icon">${confIcon[row.confidence]}</span> <span style="font-size:11px;color:var(--ink-mute)">${confLabel[row.confidence]}</span></td>
+    </tr>
+  `).join('');
+
+  updateBulkWarning();
+}
+
+function onBulkCatChange(sel) {
+  const idx = Number(sel.dataset.idx);
+  const newCat = sel.value;
+  bulkParsedJourneys[idx].category = newCat;
+  bulkParsedJourneys[idx].subcategory = newCat ? (newCat === 'beard' ? 'all' : '') : '';
+  const row = sel.closest('tr');
+  const subSel = row.querySelector('.sub-sel');
+  subSel.innerHTML = getSubcategoryOptions(newCat, bulkParsedJourneys[idx].subcategory);
+  subSel.className = 'sub-sel' + (!bulkParsedJourneys[idx].subcategory ? ' unset' : '');
+  sel.className = 'cat-sel' + (!newCat ? ' unset' : '');
+  if (newCat) bulkParsedJourneys[idx].confidence = 'high';
+  updateBulkWarning();
+}
+
+function onBulkSubChange(sel) {
+  const idx = Number(sel.dataset.idx);
+  bulkParsedJourneys[idx].subcategory = sel.value;
+  sel.className = 'sub-sel' + (!sel.value ? ' unset' : '');
+  updateBulkWarning();
+}
+
+function updateBulkWarning() {
+  const unclassified = bulkParsedJourneys.filter(r => !r.category || !r.subcategory);
+  const warn = document.getElementById('bulk-unclassified-warn');
+  const warnCount = document.getElementById('bulk-warn-count');
+  const confirmBtn = document.getElementById('bulk-confirm');
+  if (unclassified.length > 0) {
+    warn.style.display = 'block';
+    warnCount.textContent = unclassified.length;
+    confirmBtn.disabled = true;
+  } else {
+    warn.style.display = 'none';
+    confirmBtn.disabled = false;
+  }
+}
+
+function confirmBulkLoad() {
+  for (const [cat, subcats] of Object.entries(state.categoryData)) {
+    for (const subcat of Object.keys(subcats)) {
+      state.categoryData[cat][subcat] = [];
+    }
+  }
+  for (const row of bulkParsedJourneys) {
+    const { category: cat, subcategory: sub, journey: j } = row;
+    if (!cat || !sub) continue;
+    if (!state.categoryData[cat]) continue;
+    if (!state.categoryData[cat][sub]) state.categoryData[cat][sub] = [];
+    state.categoryData[cat][sub].push(j);
+  }
+
+  saveAll();
+  closeBulkModal();
+
+  const counts = [];
+  for (const [cat, subcats] of Object.entries(state.categoryData)) {
+    for (const [sub, jnys] of Object.entries(subcats)) {
+      if (jnys.length > 0) counts.push(`${jnys.length} ${cat}/${sub}`);
+    }
+  }
+
+  state.activeCategory = 'all';
+  state.activeSubcategory = 'all';
+  renderAll();
+  toast(`Loaded ${bulkParsedJourneys.length} journeys: ${counts.join(', ')}.`, 'success', 6000);
+}
 
 /* ====================================================================
-   F. UPLOAD MODAL + CATEGORY NAV BUTTONS
+   F. BULK MODAL EVENT WIRING + CATEGORY NAV BUTTONS
    ==================================================================== */
 
-function openUploadModal(presetCat, presetSubcat) {
-  const modal = document.getElementById('upload-modal');
-  modal.classList.add('open');
+document.getElementById('add-data-btn').addEventListener('click', openBulkModal);
 
-  const catSel = document.getElementById('um-cat');
-  catSel.innerHTML = CATEGORIES.map(c =>
-    `<option value="${c.id}" ${c.id === (presetCat || state.activeCategory) ? 'selected' : ''}>${c.label}</option>`
-  ).join('');
+// Choice screen
+document.getElementById('bulk-close-0').addEventListener('click', closeBulkModal);
+document.getElementById('choose-bulk').addEventListener('click', () => showBulkStep('drop'));
+document.getElementById('choose-single').addEventListener('click', () => {
+  populateSubcatDropdown();
+  showBulkStep('single');
+});
 
-  updateSubcatDropdown();
-  if (presetSubcat) document.getElementById('um-subcat').value = presetSubcat;
-}
+// Bulk flow
+document.getElementById('bulk-close-1').addEventListener('click', closeBulkModal);
+document.getElementById('bulk-close-2').addEventListener('click', closeBulkModal);
+document.getElementById('bulk-back').addEventListener('click', () => showBulkStep('choose'));
+document.getElementById('bulk-confirm').addEventListener('click', confirmBulkLoad);
 
-function updateSubcatDropdown() {
-  const catId = document.getElementById('um-cat').value;
-  const cat = CATEGORIES.find(c => c.id === catId);
-  const subcatSel = document.getElementById('um-subcat');
-  subcatSel.innerHTML = (cat?.subcategories || [])
-    .filter(s => s.id !== 'all')
-    .map(s => `<option value="${s.id}">${s.label}</option>`)
-    .join('');
-}
-
-function closeUploadModal() {
-  document.getElementById('upload-modal').classList.remove('open');
-}
-
-document.getElementById('add-data-btn').addEventListener('click', () => openUploadModal());
-document.getElementById('um-cancel').addEventListener('click', closeUploadModal);
-document.getElementById('um-cat').addEventListener('change', updateSubcatDropdown);
-document.getElementById('um-browse').addEventListener('click', () => document.getElementById('um-file-input').click());
-document.getElementById('um-file-input').addEventListener('change', e => {
-  if (e.target.files?.length) handleCategoryUpload(e.target.files);
+document.getElementById('bdz-browse').addEventListener('click', () =>
+  document.getElementById('bdz-file-input').click()
+);
+document.getElementById('bdz-file-input').addEventListener('change', e => {
+  if (e.target.files?.length) handleBulkFiles(e.target.files);
   e.target.value = '';
 });
 
-// Drag/drop on um-drop
-const umDrop = document.getElementById('um-drop');
-umDrop.addEventListener('dragover', e => { e.preventDefault(); umDrop.classList.add('dragging'); });
-umDrop.addEventListener('dragleave', () => umDrop.classList.remove('dragging'));
-umDrop.addEventListener('drop', e => {
+const dropZone = document.getElementById('bulk-drop-zone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragging'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragging'));
+dropZone.addEventListener('drop', e => {
   e.preventDefault();
-  umDrop.classList.remove('dragging');
-  if (e.dataTransfer?.files?.length) handleCategoryUpload(e.dataTransfer.files);
+  dropZone.classList.remove('dragging');
+  if (e.dataTransfer?.files?.length) handleBulkFiles(e.dataTransfer.files);
+});
+
+document.getElementById('bulk-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('bulk-modal')) closeBulkModal();
+});
+
+// Individual upload step
+document.getElementById('bulk-close-single').addEventListener('click', closeBulkModal);
+document.getElementById('single-back').addEventListener('click', () => showBulkStep('choose'));
+document.getElementById('um-cat').addEventListener('change', populateSubcatDropdown);
+document.getElementById('single-browse').addEventListener('click', () =>
+  document.getElementById('single-file-input').click()
+);
+document.getElementById('single-file-input').addEventListener('change', e => {
+  if (e.target.files?.length) handleSingleUpload(e.target.files);
+  e.target.value = '';
+});
+const singleDrop = document.getElementById('single-drop-zone');
+singleDrop.addEventListener('dragover', e => { e.preventDefault(); singleDrop.classList.add('dragging'); });
+singleDrop.addEventListener('dragleave', () => singleDrop.classList.remove('dragging'));
+singleDrop.addEventListener('drop', e => {
+  e.preventDefault();
+  singleDrop.classList.remove('dragging');
+  if (e.dataTransfer?.files?.length) handleSingleUpload(e.dataTransfer.files);
 });
 
 // Category nav clicks
@@ -2047,7 +2486,7 @@ function renderTopline() {
     const catLabel = state.activeCategory !== 'all'
       ? CATEGORIES.find(c => c.id === state.activeCategory)?.label || state.activeCategory
       : 'any category';
-    grid.innerHTML = `<div class="cat-empty"><div class="ce-title">No data loaded for ${catLabel}</div><div class="ce-sub">Upload CleverTap journey CSV exports to get started.</div><button class="ce-btn" onclick="openUploadModal()">+ Add journey data</button></div>`;
+    grid.innerHTML = `<div class="cat-empty"><div class="ce-title">No data loaded for ${catLabel}</div><div class="ce-sub">Upload CleverTap journey CSV exports to get started.</div><button class="ce-btn" onclick="openBulkModal()">+ Add journey data</button></div>`;
     note.textContent = '';
     return;
   }
@@ -2324,7 +2763,7 @@ function renderAnalytics() {
     const catLabel = state.activeCategory !== 'all'
       ? CATEGORIES.find(c => c.id === state.activeCategory)?.label || state.activeCategory
       : 'any category';
-    root.innerHTML = `<div class="cat-empty"><div class="ce-title">No data loaded for ${catLabel}</div><div class="ce-sub">Upload CleverTap journey CSV exports to get started.</div><button class="ce-btn" onclick="openUploadModal()">+ Add journey data</button></div>`;
+    root.innerHTML = `<div class="cat-empty"><div class="ce-title">No data loaded for ${catLabel}</div><div class="ce-sub">Upload CleverTap journey CSV exports to get started.</div><button class="ce-btn" onclick="openBulkModal()">+ Add journey data</button></div>`;
     return;
   }
 
@@ -2564,7 +3003,7 @@ function renderJourneys() {
     const catLabel = state.activeCategory !== 'all'
       ? CATEGORIES.find(c => c.id === state.activeCategory)?.label || state.activeCategory
       : 'any category';
-    container.innerHTML = `<div class="cat-empty"><div class="ce-title">No data loaded for ${catLabel}</div><div class="ce-sub">Upload CleverTap journey CSV exports to get started.</div><button class="ce-btn" onclick="openUploadModal()">+ Add journey data</button></div>`;
+    container.innerHTML = `<div class="cat-empty"><div class="ce-title">No data loaded for ${catLabel}</div><div class="ce-sub">Upload CleverTap journey CSV exports to get started.</div><button class="ce-btn" onclick="openBulkModal()">+ Add journey data</button></div>`;
     return;
   }
 
@@ -2645,7 +3084,7 @@ function renderFlags() {
     const catLabel = state.activeCategory !== 'all'
       ? CATEGORIES.find(c => c.id === state.activeCategory)?.label || state.activeCategory
       : 'any category';
-    container.innerHTML = `<div class="cat-empty"><div class="ce-title">No data loaded for ${catLabel}</div><div class="ce-sub">Upload CleverTap journey CSV exports to get started.</div><button class="ce-btn" onclick="openUploadModal()">+ Add journey data</button></div>`;
+    container.innerHTML = `<div class="cat-empty"><div class="ce-title">No data loaded for ${catLabel}</div><div class="ce-sub">Upload CleverTap journey CSV exports to get started.</div><button class="ce-btn" onclick="openBulkModal()">+ Add journey data</button></div>`;
     return;
   }
   const flags = generateFlags();
